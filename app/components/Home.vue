@@ -1,34 +1,41 @@
 <template>
   <Page>
-    <ActionBar>
-      <Label text="Home"></Label>
+    <ActionBar backgroundColor="#3700b3">
+      <Label text="Object Detection"></Label>
     </ActionBar>
+    <DockLayout width="100%" height="100%" stretchLastChild="false">
+      <ScrollView dock="top" style.zIndex="1" height="500" scrollableHeight="10">
+        <StackLayout class="home-panel">
+          <!--Add your page content here-->
+          <Image v-for="i in count" :key="i" src="~/assets/crime.png" margin="10" stretch="none" />
+        </StackLayout>
+      </ScrollView>
 
-    <GridLayout>
-      <Button @click="inc">{{ counter }}</Button>
-      <Label class="info">
-        <FormattedString>
-          <Span class="fas" text.decode="&#xf135; " />
-          <Span :text="counter" />
-        </FormattedString>
-      </Label>
-    </GridLayout>
+      <FlexboxLayout
+        class="bottom-nav"
+        dock="bottom"
+        justifyContent="space-between"
+        width="100%"
+        height="50"
+        backgroundColor="#3700b3"
+      >
+        <Button text="Button" class="noshad" @tap="onButtonTap" />
+        <Button text="Button" class="noshad" @tap="onButtonTap" />
+        <Button text="Button" class="noshad" @tap="onButtonTap" />
+      </FlexboxLayout>
+    </DockLayout>
   </Page>
 </template>
 
 <script>
+import * as camera from "nativescript-camera";
 export default {
   data() {
-    return { counter: 0 };
-  },
-  computed: {
-    message() {
-      return "Blank {N}-Vue app";
-    }
+    return { count: 1 };
   },
   methods: {
-    inc() {
-      this.counter = this.counter + 1;
+    onButtonTap() {
+      this.count++;
     }
   }
 };
@@ -38,13 +45,13 @@ export default {
 @import "~@nativescript/theme/scss/variables/blue";
 
 // Custom styles
-.fas {
+.bottom-nav {
+  border-top-color: black;
+  border-top-width: 1px;
   @include colorize($color: accent);
+  z-index: 100;
 }
-
-.info {
-  font-size: 20;
-  horizontal-align: center;
-  vertical-align: center;
+.noshad {
+  z-index: 0;
 }
 </style>
