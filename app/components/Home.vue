@@ -41,14 +41,15 @@ export default {
       this.count++;
     },
     upload() {
-      axios
-        .get("http://192.168.1.8:5000/")
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      axios.post(
+        "http://192.168.1.8:5000/",
+        { img: this.src },
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
     },
     takePic() {
       camera.requestCameraPermissions().then(() => {
