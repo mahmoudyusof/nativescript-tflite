@@ -7,7 +7,9 @@
       <ScrollView dock="top" style.zIndex="1" height="500" scrollableHeight="10">
         <StackLayout class="home-panel">
           <!--Add your page content here-->
-          <Image v-for="i in count" :key="i" src="~/assets/crime.png" margin="10" stretch="none" />
+          <Image src="~/assets/crime.png" margin="10" stretch="none" />
+          <Image :src="src" margin="10" stretch="none" />
+          <Image :src="converted" margin="10" stretch="none" />
         </StackLayout>
       </ScrollView>
 
@@ -19,8 +21,8 @@
         height="50"
         backgroundColor="#3700b3"
       >
-        <Button text="Button" class="noshad" @tap="onButtonTap" />
-        <Button text="Button" class="noshad" @tap="onButtonTap" />
+        <Button text="Upload" class="noshad" @tap="upload" />
+        <Button text="Take Pic" class="noshad" @tap="takePic" />
         <Button text="Button" class="noshad" @tap="onButtonTap" />
       </FlexboxLayout>
     </DockLayout>
@@ -29,13 +31,36 @@
 
 <script>
 import * as camera from "nativescript-camera";
+import axios from "axios";
 export default {
   data() {
-    return { count: 1 };
+    return { count: 1, src: "", converted: "" };
   },
   methods: {
     onButtonTap() {
       this.count++;
+    },
+    upload() {
+      axios
+        .get("http://192.168.1.8:5000/")
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    takePic() {
+      camera.requestCameraPermissions().then(() => {
+        camera
+          .takePicture()
+          .then(asset => {
+            this.src = asset;
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      });
     }
   }
 };
