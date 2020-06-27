@@ -9,7 +9,7 @@
           <!--Add your page content here-->
           <Image src="~/assets/crime.png" margin="10" stretch="none" />
           <Image :src="src" margin="10" stretch="none" />
-          <Image :src="converted" margin="10" stretch="none" />
+          <Image :src="converted" ref="converted" margin="10" stretch="none" />
         </StackLayout>
       </ScrollView>
 
@@ -35,7 +35,7 @@ import axios from "axios";
 import * as ImageSourceModule from "tns-core-modules/image-source";
 export default {
   data() {
-    return { count: 1, src: "", converted: "" };
+    return { count: 1, src: "", converted: "~/assets/crime.png" };
   },
   methods: {
     onButtonTap() {
@@ -54,7 +54,11 @@ export default {
           );
         })
         .then(res => {
-          console.log(res.data);
+          console.log(res.data.slice(0, 20));
+          let img = ImageSourceModule.ImageSource.fromBase64Sync(res.data);
+          this.converted = img;
+          console.log(img);
+          console.log(img);
         })
         .catch(e => console.log(e));
     },
