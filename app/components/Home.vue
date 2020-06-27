@@ -32,6 +32,7 @@
 <script>
 import * as camera from "nativescript-camera";
 import axios from "axios";
+import * as ImageSourceModule from "tns-core-modules/image-source";
 export default {
   data() {
     return { count: 1, src: "", converted: "" };
@@ -41,15 +42,21 @@ export default {
       this.count++;
     },
     upload() {
-      axios.post(
-        "http://192.168.1.8:5000/",
-        { img: this.src },
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
+      ImageSourceModule.ImageSource.fromAsset(this.src)
+        .then(src => src.toBase64String("jpg"))
+        .then(base64 => {
+          return axios.post(
+            "http://192.168.1.8:5000/",
+            { img: base64 },
+            {
+              headers: { "Content-Type": "application/json" }
+            }
+          );
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(e => console.log(e));
     },
     takePic() {
       camera.requestCameraPermissions().then(() => {
