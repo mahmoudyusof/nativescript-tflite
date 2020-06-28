@@ -20,10 +20,15 @@ def tensor_to_image(tensor):
 
 @app.route("/", methods=['GET', 'POST', 'OPTIONS'])
 def index():
-    image = base64.b64decode(request.json.get('img'))
-    image = np.array(Image.open(io.BytesIO(image)))
-    print(image.shape)
-    return base64.b64encode(image)
+    input_image = base64.b64decode(request.json.get('img'))
+    input_array = np.array(Image.open(io.BytesIO(input_image)))
+    output_img = Image.fromarray(input_array, 'RGB')
+    buffer = io.BytesIO()
+    output_img.save(buffer, format="JPEG")
+    response = base64.b64encode(buffer.getvalue())
+    print(request.json.get('img')[:20])
+    print(str(response[:20]))
+    return request.json.get('img')
 
 
 if __name__ == "__main__":
